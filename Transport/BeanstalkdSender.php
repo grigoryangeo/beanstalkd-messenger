@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Messenger\Bridge\Beanstalkd\Transport;
 
+use Pheanstalk\Contract\PheanstalkInterface;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
 use Symfony\Component\Messenger\Transport\Sender\SenderInterface;
@@ -39,7 +40,11 @@ class BeanstalkdSender implements SenderInterface
         $delayStamp = $envelope->last(DelayStamp::class);
         $delayInMs = null !== $delayStamp ? $delayStamp->getDelay() : 0;
 
-        $this->connection->send($encodedMessage['body'], $encodedMessage['headers'] ?? [], $delayInMs);
+        /** @var PriorityStamp|null $priorityStamp */
+        $priorityStamp = $envelope->last(PriorityStamp::class);
+        $priority = null !== $priorityStamp ? $priorityStamp->getPriority() : PheanstalkInterface::DEFAULT_PRIORITY;
+
+        $this->connection->send($encodedMessage['body'], $encodedMessage['headers'] ?? [], $delayInMs, $priority);
 
         return $envelope;
     }

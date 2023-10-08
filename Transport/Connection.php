@@ -108,7 +108,7 @@ class Connection
      *
      * @return string The inserted id
      */
-    public function send(string $body, array $headers, int $delay = 0): string
+    public function send(string $body, array $headers, int $delay = 0, int $priority = PheanstalkInterface::DEFAULT_PRIORITY): string
     {
         $message = json_encode([
             'body' => $body,
@@ -122,7 +122,7 @@ class Connection
         try {
             $job = $this->client->useTube($this->tube)->put(
                 $message,
-                PheanstalkInterface::DEFAULT_PRIORITY,
+                $priority,
                 $delay / 1000,
                 $this->ttr
             );
