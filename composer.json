@@ -1,5 +1,5 @@
 {
-    "name": "grigoryangeo/beanstalkd-messenger",
+    "name": "symfony/beanstalkd-messenger",
     "type": "symfony-messenger-bridge",
     "description": "Symfony Beanstalkd Messenger Bridge",
     "keywords": [],
@@ -25,5 +25,6 @@
         "exclude-from-classmap": [
             "/Tests/"
         ]
-    }
+    },
+    "minimum-stability": "dev"
 }
